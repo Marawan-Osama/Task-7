@@ -1,0 +1,442 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000218  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000028c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000003  00800060  00800060  0000028c  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000028c  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002bc  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000d0  00000000  00000000  000002f8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000b47  00000000  00000000  000003c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000007e9  00000000  00000000  00000f0f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000462  00000000  00000000  000016f8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000140  00000000  00000000  00001b5c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000003ee  00000000  00000000  00001c9c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000166  00000000  00000000  0000208a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000090  00000000  00000000  000021f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a3 36       	cpi	r26, 0x63	; 99
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 a0 00 	call	0x140	; 0x140 <main>
+  74:	0c 94 0a 01 	jmp	0x214	; 0x214 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <DIO_init>:
+ */ 
+
+#include "DIO.h"
+#include "Registers.h"
+
+void DIO_init(uint8_t CTRL_state[4]){
+  7c:	fc 01       	movw	r30, r24
+	PA_CTRL = CTRL_state[0];
+  7e:	80 81       	ld	r24, Z
+  80:	8a bb       	out	0x1a, r24	; 26
+	PB_CTRL = CTRL_state[1];
+  82:	81 81       	ldd	r24, Z+1	; 0x01
+  84:	87 bb       	out	0x17, r24	; 23
+	PC_CTRL = CTRL_state[2];
+  86:	82 81       	ldd	r24, Z+2	; 0x02
+  88:	84 bb       	out	0x14, r24	; 20
+	PD_CTRL = CTRL_state[3];
+  8a:	83 81       	ldd	r24, Z+3	; 0x03
+  8c:	81 bb       	out	0x11, r24	; 17
+  8e:	08 95       	ret
+
+00000090 <DIO_read>:
+}
+
+
+void DIO_read(uint8_t port, uint8_t* read_info){
+	switch(port){
+  90:	82 34       	cpi	r24, 0x42	; 66
+  92:	69 f0       	breq	.+26     	; 0xae <DIO_read+0x1e>
+  94:	18 f4       	brcc	.+6      	; 0x9c <DIO_read+0xc>
+  96:	81 34       	cpi	r24, 0x41	; 65
+  98:	31 f0       	breq	.+12     	; 0xa6 <DIO_read+0x16>
+  9a:	08 95       	ret
+  9c:	83 34       	cpi	r24, 0x43	; 67
+  9e:	59 f0       	breq	.+22     	; 0xb6 <DIO_read+0x26>
+  a0:	84 34       	cpi	r24, 0x44	; 68
+  a2:	69 f0       	breq	.+26     	; 0xbe <DIO_read+0x2e>
+  a4:	08 95       	ret
+		case 'A':
+			*read_info = PA_STAT;
+  a6:	89 b3       	in	r24, 0x19	; 25
+  a8:	fb 01       	movw	r30, r22
+  aa:	80 83       	st	Z, r24
+			break;
+  ac:	08 95       	ret
+		case 'B':
+			*read_info = PB_STAT;
+  ae:	86 b3       	in	r24, 0x16	; 22
+  b0:	fb 01       	movw	r30, r22
+  b2:	80 83       	st	Z, r24
+			break;
+  b4:	08 95       	ret
+		case 'C':
+			*read_info = PC_STAT;
+  b6:	83 b3       	in	r24, 0x13	; 19
+  b8:	fb 01       	movw	r30, r22
+  ba:	80 83       	st	Z, r24
+			break;
+  bc:	08 95       	ret
+		case 'D':
+			*read_info = PD_STAT;
+  be:	80 b3       	in	r24, 0x10	; 16
+  c0:	fb 01       	movw	r30, r22
+  c2:	80 83       	st	Z, r24
+  c4:	08 95       	ret
+
+000000c6 <DIO_write>:
+	}
+}
+
+
+void DIO_write(uint8_t port, uint8_t data){
+	switch(port){
+  c6:	82 34       	cpi	r24, 0x42	; 66
+  c8:	59 f0       	breq	.+22     	; 0xe0 <DIO_write+0x1a>
+  ca:	18 f4       	brcc	.+6      	; 0xd2 <DIO_write+0xc>
+  cc:	81 34       	cpi	r24, 0x41	; 65
+  ce:	31 f0       	breq	.+12     	; 0xdc <DIO_write+0x16>
+  d0:	08 95       	ret
+  d2:	83 34       	cpi	r24, 0x43	; 67
+  d4:	39 f0       	breq	.+14     	; 0xe4 <DIO_write+0x1e>
+  d6:	84 34       	cpi	r24, 0x44	; 68
+  d8:	39 f0       	breq	.+14     	; 0xe8 <DIO_write+0x22>
+  da:	08 95       	ret
+		case 'A':
+			PA_DATA = data;
+  dc:	6b bb       	out	0x1b, r22	; 27
+			break;
+  de:	08 95       	ret
+		case 'B':
+			PB_DATA = data;
+  e0:	68 bb       	out	0x18, r22	; 24
+			break;
+  e2:	08 95       	ret
+		case 'C':
+			PC_DATA = data;
+  e4:	65 bb       	out	0x15, r22	; 21
+			break;
+  e6:	08 95       	ret
+		case 'D':
+			PD_DATA = data;
+  e8:	62 bb       	out	0x12, r22	; 18
+  ea:	08 95       	ret
+
+000000ec <LED_off>:
+	LED_off();
+}
+
+
+void LED_off(){
+	DIO_write(LED_port,0);
+  ec:	60 e0       	ldi	r22, 0x00	; 0
+  ee:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <LED_port>
+  f2:	0e 94 63 00 	call	0xc6	; 0xc6 <DIO_write>
+	LED_state = 0;
+  f6:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <LED_state>
+  fa:	08 95       	ret
+
+000000fc <LED_init>:
+
+#include "LED.h"
+
+
+void LED_init(uint8_t port, uint8_t pin){
+	LED_port = port;
+  fc:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <LED_port>
+	LED_pin = pin;
+ 100:	60 93 60 00 	sts	0x0060, r22	; 0x800060 <__DATA_REGION_ORIGIN__>
+	LED_off();
+ 104:	0e 94 76 00 	call	0xec	; 0xec <LED_off>
+ 108:	08 95       	ret
+
+0000010a <LED_on>:
+	LED_state = 0;
+}
+
+
+void LED_on(){
+	DIO_write(LED_port,1<<LED_pin);
+ 10a:	61 e0       	ldi	r22, 0x01	; 1
+ 10c:	70 e0       	ldi	r23, 0x00	; 0
+ 10e:	00 90 60 00 	lds	r0, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 112:	02 c0       	rjmp	.+4      	; 0x118 <LED_on+0xe>
+ 114:	66 0f       	add	r22, r22
+ 116:	77 1f       	adc	r23, r23
+ 118:	0a 94       	dec	r0
+ 11a:	e2 f7       	brpl	.-8      	; 0x114 <LED_on+0xa>
+ 11c:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <LED_port>
+ 120:	0e 94 63 00 	call	0xc6	; 0xc6 <DIO_write>
+	LED_state = 1;
+ 124:	81 e0       	ldi	r24, 0x01	; 1
+ 126:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <LED_state>
+ 12a:	08 95       	ret
+
+0000012c <LED_change_state>:
+}
+
+
+void LED_change_state(){
+	if(LED_state == 1){
+ 12c:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <LED_state>
+ 130:	81 30       	cpi	r24, 0x01	; 1
+ 132:	19 f4       	brne	.+6      	; 0x13a <LED_change_state+0xe>
+		LED_off();
+ 134:	0e 94 76 00 	call	0xec	; 0xec <LED_off>
+ 138:	08 95       	ret
+		}
+		else{
+		LED_on();
+ 13a:	0e 94 85 00 	call	0x10a	; 0x10a <LED_on>
+ 13e:	08 95       	ret
+
+00000140 <main>:
+#include "Registers.h"
+#include "LED.h"
+#include "Timer.h"
+
+int main(void)
+{
+ 140:	cf 93       	push	r28
+ 142:	df 93       	push	r29
+ 144:	00 d0       	rcall	.+0      	; 0x146 <main+0x6>
+ 146:	00 d0       	rcall	.+0      	; 0x148 <main+0x8>
+ 148:	00 d0       	rcall	.+0      	; 0x14a <main+0xa>
+ 14a:	cd b7       	in	r28, 0x3d	; 61
+ 14c:	de b7       	in	r29, 0x3e	; 62
+	uint8_t button;
+	uint8_t Flag = 0;
+ 14e:	1a 82       	std	Y+2, r1	; 0x02
+	uint32_t On_delay = 300;
+	uint32_t Off_delay = 500;
+	uint8_t CTRL_state[4] = {0x01,0x00,0x00,0x00};
+ 150:	81 e0       	ldi	r24, 0x01	; 1
+ 152:	8b 83       	std	Y+3, r24	; 0x03
+ 154:	1c 82       	std	Y+4, r1	; 0x04
+ 156:	1d 82       	std	Y+5, r1	; 0x05
+ 158:	1e 82       	std	Y+6, r1	; 0x06
+	DIO_init(CTRL_state);
+ 15a:	ce 01       	movw	r24, r28
+ 15c:	03 96       	adiw	r24, 0x03	; 3
+ 15e:	0e 94 3e 00 	call	0x7c	; 0x7c <DIO_init>
+	LED_init('A',0);
+ 162:	60 e0       	ldi	r22, 0x00	; 0
+ 164:	81 e4       	ldi	r24, 0x41	; 65
+ 166:	0e 94 7e 00 	call	0xfc	; 0xfc <LED_init>
+	Timer_init(0x00);
+ 16a:	80 e0       	ldi	r24, 0x00	; 0
+ 16c:	90 e0       	ldi	r25, 0x00	; 0
+ 16e:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <Timer_init>
+	LED_init('A',0);
+ 172:	60 e0       	ldi	r22, 0x00	; 0
+ 174:	81 e4       	ldi	r24, 0x41	; 65
+ 176:	0e 94 7e 00 	call	0xfc	; 0xfc <LED_init>
+	uint32_t Timer_config = 0x05;
+	
+    while (1) 
+    {
+		DIO_read('C',&button);
+ 17a:	be 01       	movw	r22, r28
+ 17c:	6f 5f       	subi	r22, 0xFF	; 255
+ 17e:	7f 4f       	sbci	r23, 0xFF	; 255
+ 180:	83 e4       	ldi	r24, 0x43	; 67
+ 182:	0e 94 48 00 	call	0x90	; 0x90 <DIO_read>
+		while(button == 1){
+ 186:	89 81       	ldd	r24, Y+1	; 0x01
+ 188:	81 30       	cpi	r24, 0x01	; 1
+ 18a:	39 f5       	brne	.+78     	; 0x1da <main+0x9a>
+			Timer_start(Timer_config);
+ 18c:	85 e0       	ldi	r24, 0x05	; 5
+ 18e:	90 e0       	ldi	r25, 0x00	; 0
+ 190:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <Timer_start>
+			LED_change_state();
+ 194:	0e 94 96 00 	call	0x12c	; 0x12c <LED_change_state>
+			Get_state(On_delay,&Flag);
+ 198:	be 01       	movw	r22, r28
+ 19a:	6e 5f       	subi	r22, 0xFE	; 254
+ 19c:	7f 4f       	sbci	r23, 0xFF	; 255
+ 19e:	8c e2       	ldi	r24, 0x2C	; 44
+ 1a0:	91 e0       	ldi	r25, 0x01	; 1
+ 1a2:	0e 94 f6 00 	call	0x1ec	; 0x1ec <Get_state>
+			if(Flag != 0){				
+ 1a6:	8a 81       	ldd	r24, Y+2	; 0x02
+ 1a8:	88 23       	and	r24, r24
+ 1aa:	71 f0       	breq	.+28     	; 0x1c8 <main+0x88>
+				Flag = 0;				
+ 1ac:	1a 82       	std	Y+2, r1	; 0x02
+				Set_point(0x00);		
+ 1ae:	80 e0       	ldi	r24, 0x00	; 0
+ 1b0:	90 e0       	ldi	r25, 0x00	; 0
+ 1b2:	0e 94 f4 00 	call	0x1e8	; 0x1e8 <Set_point>
+				LED_off();
+ 1b6:	0e 94 76 00 	call	0xec	; 0xec <LED_off>
+				Get_state(Off_delay,&Flag);
+ 1ba:	be 01       	movw	r22, r28
+ 1bc:	6e 5f       	subi	r22, 0xFE	; 254
+ 1be:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1c0:	84 ef       	ldi	r24, 0xF4	; 244
+ 1c2:	91 e0       	ldi	r25, 0x01	; 1
+ 1c4:	0e 94 f6 00 	call	0x1ec	; 0x1ec <Get_state>
+			}
+			DIO_read('C',&button);
+ 1c8:	be 01       	movw	r22, r28
+ 1ca:	6f 5f       	subi	r22, 0xFF	; 255
+ 1cc:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1ce:	83 e4       	ldi	r24, 0x43	; 67
+ 1d0:	0e 94 48 00 	call	0x90	; 0x90 <DIO_read>
+	uint32_t Timer_config = 0x05;
+	
+    while (1) 
+    {
+		DIO_read('C',&button);
+		while(button == 1){
+ 1d4:	89 81       	ldd	r24, Y+1	; 0x01
+ 1d6:	81 30       	cpi	r24, 0x01	; 1
+ 1d8:	c9 f2       	breq	.-78     	; 0x18c <main+0x4c>
+				LED_off();
+				Get_state(Off_delay,&Flag);
+			}
+			DIO_read('C',&button);
+    }
+	LED_off();
+ 1da:	0e 94 76 00 	call	0xec	; 0xec <LED_off>
+}
+ 1de:	cd cf       	rjmp	.-102    	; 0x17a <main+0x3a>
+
+000001e0 <Timer_init>:
+	Prescaler = prescaler;
+}
+
+
+void Timer_stop(){
+	Prescaler = 0;
+ 1e0:	82 bf       	out	0x32, r24	; 50
+ 1e2:	08 95       	ret
+
+000001e4 <Timer_start>:
+ 1e4:	83 bf       	out	0x33, r24	; 51
+ 1e6:	08 95       	ret
+
+000001e8 <Set_point>:
+}
+
+
+void Set_point(uint32_t Point){
+	Time_point = Point;
+ 1e8:	82 bf       	out	0x32, r24	; 50
+ 1ea:	08 95       	ret
+
+000001ec <Get_state>:
+}
+
+
+void Get_state(uint32_t goal ,uint8_t *flag){
+	while(1){
+		if(Time_point == 0xff || Time_point == goal){
+ 1ec:	22 b7       	in	r18, 0x32	; 50
+ 1ee:	2f 3f       	cpi	r18, 0xFF	; 255
+ 1f0:	29 f0       	breq	.+10     	; 0x1fc <Get_state+0x10>
+ 1f2:	22 b7       	in	r18, 0x32	; 50
+ 1f4:	30 e0       	ldi	r19, 0x00	; 0
+ 1f6:	82 17       	cp	r24, r18
+ 1f8:	93 07       	cpc	r25, r19
+ 1fa:	c1 f7       	brne	.-16     	; 0x1ec <Get_state>
+			if(goal - Time_point > 0){
+ 1fc:	22 b7       	in	r18, 0x32	; 50
+ 1fe:	30 e0       	ldi	r19, 0x00	; 0
+ 200:	82 17       	cp	r24, r18
+ 202:	93 07       	cpc	r25, r19
+ 204:	19 f0       	breq	.+6      	; 0x20c <Get_state+0x20>
+	Prescaler = 0;
+}
+
+
+void Set_point(uint32_t Point){
+	Time_point = Point;
+ 206:	12 be       	out	0x32, r1	; 50
+void Get_state(uint32_t goal ,uint8_t *flag){
+	while(1){
+		if(Time_point == 0xff || Time_point == goal){
+			if(goal - Time_point > 0){
+				Set_point(0);
+				goal -= 256;
+ 208:	9a 95       	dec	r25
+ 20a:	f0 cf       	rjmp	.-32     	; 0x1ec <Get_state>
+			}
+			else{
+				*flag = 1;
+ 20c:	81 e0       	ldi	r24, 0x01	; 1
+ 20e:	fb 01       	movw	r30, r22
+ 210:	80 83       	st	Z, r24
+ 212:	08 95       	ret
+
+00000214 <_exit>:
+ 214:	f8 94       	cli
+
+00000216 <__stop_program>:
+ 216:	ff cf       	rjmp	.-2      	; 0x216 <__stop_program>
